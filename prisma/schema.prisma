@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  timezone  String?
+  createdAt DateTime @default(now())
+  profiles  Profile?
+  attempts  Attempt[]
+}
+
+model Profile {
+  userId         String @id
+  avatarUrl      String?
+  goal           String?
+  nativeLanguage String?
+  targetLevel    String  @default("A1")
+  user           User    @relation(fields: [userId], references: [id])
+}
+
+model Lesson {
+  id             String   @id @default(uuid())
+  level          String   @default("A1")
+  title          String
+  objectivesJson Json
+  grammarMd      String
+  vocabularyJson Json
+  sampleDialogue Json
+  isActive       Boolean  @default(true)
+  attempts       Attempt[]
+  unlockRules    UnlockRule?
+}
+
+model Attempt {
+  id            String   @id @default(uuid())
+  userId        String
+  lessonId      String
+  startedAt     DateTime @default(now())
+  finishedAt    DateTime?
+  modality      String   // "text" | "voice"
+  turnCount     Int      @default(0)
+  ratingOverall Int?
+  rubricJson    Json?
+  feedbackText  String?
+  user          User     @relation(fields: [userId], references: [id])
+  lesson        Lesson   @relation(fields: [lessonId], references: [id])
+  messages      Message[]
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  attemptId String
+  role      String   // "user" | "assistant" | "system"
+  content   String
+  audioUrl  String?
+  createdAt DateTime @default(now())
+  attempt   Attempt  @relation(fields: [attemptId], references: [id])
+}
+
+model UnlockRule {
+  id        String  @id @default(uuid())
+  lessonId  String  @unique
+  minRating Int     @default(70)
+  minTurns  Int     @default(8)
+  lesson    Lesson  @relation(fields: [lessonId], references: [id])
+}
