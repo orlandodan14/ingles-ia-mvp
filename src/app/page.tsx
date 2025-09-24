@@ -14,10 +14,10 @@ export default function HomePage() {
         </p>
         <div className="mt-6 flex gap-3">
           <Button asChild>
-            <a href="/(auth)/register">Comenzar ahora <ArrowRight className="ml-2 h-4 w-4"/></a>
+            <a href="/register">Comenzar ahora <ArrowRight className="ml-2 h-4 w-4"/></a>
           </Button>
           <Button variant="outline" asChild>
-            <a href="/(auth)/login">Ya tengo cuenta <LogIn className="ml-2 h-4 w-4"/></a>
+            <a href="/login">Ya tengo cuenta <LogIn className="ml-2 h-4 w-4"/></a>
           </Button>
         </div>
       </div>
