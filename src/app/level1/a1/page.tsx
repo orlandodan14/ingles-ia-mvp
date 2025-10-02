@@ -122,7 +122,7 @@ export default function A1LevelPage() {
                     <Lock className="h-4 w-4"/> Desbloquea alcanzando 70+
                   </Button>
                 ) : (
-                  <Button href={`/lesson/${l.id}`}>
+                  <Button href={`/level1/a1/lesson/${l.id}`}>
                     <BookOpen className="h-4 w-4"/> Abrir lección
                   </Button>
                 )}
